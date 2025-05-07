@@ -6,9 +6,10 @@ const CartItem = ({ item }) => {
   const { removeFromCart, addToCart } = useCart();
   const { menuItem, quantity } = item;
 
-  const handleRemove = () => {
-    removeFromCart(menuItem._id);
-  };
+ const handleRemove = () => {
+  removeFromCart(menuItem._id, 1); 
+};
+
 
   const handleAddMore = () => {
     addToCart(menuItem._id);
