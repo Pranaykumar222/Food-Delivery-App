@@ -15,9 +15,10 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 
 app.use(cors({
-  origin: 'https://food-delivery-app-ten-mauve.vercel.app',
-  credentials: true 
-}));
+    origin: 'https://food-delivery-app-ten-mauve.vercel.app',
+    credentials: true 
+  }));
+
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
