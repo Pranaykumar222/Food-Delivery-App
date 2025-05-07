@@ -57,22 +57,23 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (menuItemId) => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      await axios.post(`${API_BASE}/api/cart/remove`, 
-        { menuItemId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success('Item removed from cart');
-      await fetchCart();
-    } catch (error) {
-      toast.error('Failed to remove item from cart');
-    } finally {
-      setLoading(false);
-    }
-  };
+ const removeFromCart = async (menuItemId, quantity = 1) => {
+  if (!user) return;
+  setLoading(true);
+  try {
+    await axios.post(`${API_BASE}/api/cart/remove`, 
+      { menuItemId, quantity },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    toast.success('Item updated in cart');
+    await fetchCart();
+  } catch (error) {
+    toast.error('Failed to update cart');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const clearCart = async () => {
     setCart({ items: [] });
