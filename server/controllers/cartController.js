@@ -42,33 +42,46 @@ export const addToCart = async (req, res) => {
 };
 
 export const removeFromCart = async (req, res) => {
-    const userId = req.user.id;
-    const { menuItemId } = req.body;
-  
-    if (!menuItemId) {
-      return res.status(400).json({ msg: "Menu item ID is required" });
+  const userId = req.user.id;
+  const { menuItemId, quantity = 1 } = req.body;
+
+  if (!menuItemId) {
+    return res.status(400).json({ msg: "Menu item ID is required" });
+  }
+
+  try {
+    const cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ msg: "Cart not found" });
     }
-  
-    try {
-      const cart = await Cart.findOne({ userId });
-  
-      if (!cart) {
-        return res.status(404).json({ msg: "Cart not found" });
-      }
-  
-      const itemIndex = cart.items.findIndex(item => item.menuItem.toString() === menuItemId);
-      if (itemIndex === -1) {
-        return res.status(404).json({ msg: "Item not found in cart" });
-      }
-  
+
+    const itemIndex = cart.items.findIndex(
+      item => item.menuItem.toString() === menuItemId
+    );
+
+    if (itemIndex === -1) {
+      return res.status(404).json({ msg: "Item not found in cart" });
+    }
+
+    const item = cart.items[itemIndex];
+
+    if (item.quantity > quantity) {
+      // Decrement quantity
+      item.quantity -= quantity;
+    } else {
+      // Remove item if quantity is 1 or less
       cart.items.splice(itemIndex, 1);
-      await cart.save();
-  
-      res.json({ msg: "Item removed from cart", cart });
-    } catch (err) {
-      res.status(500).json({ msg: err.message });
     }
+
+    await cart.save();
+
+    res.json({ msg: "Cart updated", cart });
+  } catch (err) {
+    res.status(500).json({ msg: err.message });
+  }
 };
+
 
 export const getCart = async (req, res) => {
   const cart = await Cart.findOne({ userId: req.user.id }).populate('items.menuItem');
