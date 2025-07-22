@@ -55,7 +55,7 @@ const AdminMenuItem = ({ item, onEdit, onDelete }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price ($)</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
               <input
                 type="number"
                 name="price"
@@ -100,11 +100,11 @@ const AdminMenuItem = ({ item, onEdit, onDelete }) => {
         <div className="p-4">
           <div className="flex justify-between items-start">
             <h3 className="text-lg font-bold text-gray-800">{item.name}</h3>
-            <span className="text-orange-500 font-bold">${item.price.toFixed(2)}</span>
+            <span className="text-orange-500 font-bold">₹{item.price.toFixed(2)}</span>
           </div>
           <p className="text-gray-500 text-sm mt-1 capitalize">{item.category}</p>
           <div className="mt-4 flex justify-between items-center">
-            <span className={`text-xs px-2 py-1 rounded-full ${item.availability ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            <span className={`text-xs px-2 py-1 rounded-full ₹{item.availability ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
               {item.availability ? 'Available' : 'Unavailable'}
             </span>
             <div className="flex space-x-2">
